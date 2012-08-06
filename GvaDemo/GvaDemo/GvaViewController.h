@@ -14,9 +14,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-#import "GameKitManager.h"
+//#import "GameKitManager.h"
 
-@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GameKitManagerDataDelegate>
+@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GKPeerPickerControllerDelegate,GKSessionDelegate>
 
 @property (nonatomic,retain) CLLocationManager *locationManager;
 
@@ -24,5 +24,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *mode;
 
 @property (nonatomic) int functionLabelNotifier;
+
+@property (nonatomic, retain) GKSession* session;
+@property (nonatomic, retain) NSString* peerID;
 
 @end

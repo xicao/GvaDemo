@@ -11,6 +11,10 @@
 
 #define CALIBRATION                 22
 
+#define STATUS_INFORMATION_BAR      CGRectMake(143,126-CALIBRATION,738,51)
+
+#define VIDEO_FRAME                 CGRectMake(143,126-CALIBRATION,738,51)
+
 #define FUNCTION_BUTTON             CGRectMake(157.5,30-CALIBRATION,65,65)
 #define FUNCTION_BUTTON_GAP         92
 
@@ -28,6 +32,7 @@
 @property (nonatomic, weak) IBOutlet GvaView *gvaView;
 
 @property (nonatomic,retain) UIImageView *compass;
+@property (nonatomic,retain) UILabel *statusAndAlertInformationBar;
 
 @end
 
@@ -38,6 +43,8 @@
 @synthesize gvaView = _gvaView;
 @synthesize compass = _compass;
 @synthesize locationManager = _locationManager;
+@synthesize session = _session;
+@synthesize peerID = _peerID;
 
 # pragma mark - Lazy Instantiation
 
@@ -49,10 +56,161 @@
     return _compass;
 }
 
-# pragma mark - Game Kit Session Methods
-
-- (void)receivedData:(NSData *)data {
+- (UILabel *)statusAndAlertInformationBar {
+    if (!_statusAndAlertInformationBar) {
+        _statusAndAlertInformationBar = [[UILabel alloc] initWithFrame:STATUS_INFORMATION_BAR];
+    }
     
+    return _statusAndAlertInformationBar;
+}
+
+# pragma mark - Helper Methods
+
+#define showAlert(format, ...) myShowAlert(__LINE__, (char *)__FUNCTION__, format, ##__VA_ARGS__)
+// Simple Alert Utility
+void myShowAlert(int line, char *functname, id formatstring,...) {
+	va_list arglist;
+	if (!formatstring) return;
+	va_start(arglist, formatstring);
+	id outstring = [[NSString alloc] initWithFormat:formatstring arguments:arglist];
+	va_end(arglist);
+	
+    UIAlertView *av = [[UIAlertView alloc] initWithTitle:outstring message:nil delegate:nil cancelButtonTitle:@"OK"otherButtonTitles:nil];
+	[av show];
+}
+
+- (void)clearStatusAndAlertInformationBarText {
+    self.statusAndAlertInformationBar.text = @"";
+}
+
+- (void)setStatusAndAlertInformationBarText:(NSString *)info {
+    [self clearStatusAndAlertInformationBarText];
+    self.statusAndAlertInformationBar.text = [self.statusAndAlertInformationBar.text stringByAppendingString:info];
+}
+
+#pragma mark - send and receive methods
+
+- (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context {
+}
+
+- (void)sentText:(NSString *)message {
+    if (!self.session) {
+        showAlert(@"You are not connecting to any device.");
+        return;
+    }
+    
+    NSError* error = nil;
+	[self.session sendData:[message dataUsingEncoding:NSUTF8StringEncoding]
+				   toPeers:[NSArray arrayWithObject:self.peerID]
+			  withDataMode:GKSendDataReliable
+					 error:&error];
+    
+	if (error) {
+		showAlert(@"%@", error);
+	}
+}
+
+- (void)sendImage:(UIImage *)image {
+    NSError* error = nil;
+	[self.session sendData:UIImageJPEGRepresentation(image, 0.5)
+				   toPeers:[NSArray arrayWithObject:self.peerID]
+			  withDataMode:GKSendDataReliable
+					 error:&error];
+    
+	if (error) {
+		NSLog(@"%@", error);
+	}
+}
+
+# pragma mark - Connection Methods
+
+- (void)connect {
+    [self setStatusAndAlertInformationBarText:@"Start searching..."];
+    
+    GKPeerPickerController* picker = [[GKPeerPickerController alloc] init];
+    picker.delegate = self;
+    picker.connectionTypesMask = GKPeerPickerConnectionTypeOnline | GKPeerPickerConnectionTypeNearby;
+    
+    [picker show];
+}
+
+- (void)disConnect {
+    [self.session disconnectFromAllPeers];
+    self.session.available = NO;
+    self.session.delegate = nil;
+}
+
+# pragma mark - Game Kit Picker Methods
+
+- (void)peerPickerController:(GKPeerPickerController *)picker didSelectConnectionType:(GKPeerPickerConnectionType)type {
+    // from Apple - Game Kit Programmiing Guide: Finding Peers with Peer Picker
+    if (type == GKPeerPickerConnectionTypeOnline) {
+		picker.delegate = nil;
+		[picker dismiss];
+		
+		self.session = [[GKSession alloc] initWithSessionID:nil
+                                                displayName:self.mode.text
+                                                sessionMode:GKSessionModePeer];
+		self.session.delegate = self;
+		self.session.available = YES;
+		[self.session setDataReceiveHandler:self withContext:nil];
+	}
+}
+
+- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
+    // from Apple - Game Kit Programmiing Guide: Finding Peers with Peer Picker
+    
+    self.session = session;
+	session.delegate = self;
+	[session setDataReceiveHandler:self withContext:nil];
+	picker.delegate = nil;
+	[picker dismiss];
+}
+
+- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker {
+	// from Apple - Game Kit Programmiing Guide: Finding Peers with Peer Picker;
+	picker.delegate = nil;
+    [self clearStatusAndAlertInformationBarText];
+}
+
+#pragma mark - session methods
+
+- (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
+    
+    switch (state) {
+		case GKPeerStateAvailable:
+			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
+			[session connectToPeer:peerID withTimeout:10];
+			break;
+			
+		case GKPeerStateConnected:
+			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", [session displayNameForPeer:peerID]]];
+			self.peerID = peerID;
+			break;
+            
+		case GKPeerStateDisconnected:
+			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", [session displayNameForPeer:peerID]]];
+			self.session = nil;
+            
+		default:
+			break;
+	}
+}
+
+- (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
+	NSError* error = nil;
+	[session acceptConnectionFromPeer:peerID error:&error];
+	if (error) {
+		NSLog(@"%@", error);
+	}
+}
+
+- (void)session:(GKSession *)session connectionWithPeerFailed:(NSString *)peerID withError:(NSError *)error {
+	NSLog(@"%@|%@", peerID, error);
+}
+
+- (void)session:(GKSession *)session didFailWithError:(NSError *)error {
+	NSLog(@"%@", error);
 }
 
 # pragma mark - Button Methods
@@ -88,9 +246,9 @@
 
 - (void)reconfigurableButtonsPressed:(UIButton *)sender {
     if ([sender.currentTitle isEqualToString:@"F1"]) {
-        [GameKitManager connect];
+        [self connect];
     } else if ([sender.currentTitle isEqualToString:@"F2"]) {
-        [GameKitManager disconnect];
+        [self disConnect];
     } else if ([sender.currentTitle isEqualToString:@"F3"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F4"]) {
@@ -151,10 +309,6 @@
 	self.locationManager.headingFilter = 1;
 	self.locationManager.delegate = self;
 	[self.locationManager startUpdatingHeading];
-    
-    //game kit session
-    [GameKitManager sharedInstance].sessionID = self.mode.text;
-    [GameKitManager sharedInstance].dataDelegate = self;
 }
 
 - (void)viewDidUnload {
@@ -162,6 +316,10 @@
     // Release any retained subviews of the main view.
     
     [self setMode:nil];
+    [self setCompass:nil];
+    [self setSession:nil];
+    [self setStatusAndAlertInformationBar:nil];
+    [self.locationManager stopUpdatingHeading];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -237,6 +395,12 @@
     // add compass
     [self.compass setFrame:COMPASS];
     [self.gvaView addSubview:self.compass];
+    
+    // add status and alert information bar
+    [self.statusAndAlertInformationBar setBackgroundColor:[UIColor clearColor]];
+    //self.statusAndAlertInformationBar.backgroundColor = nil;
+    self.statusAndAlertInformationBar.numberOfLines = 3;
+    [self.gvaView addSubview:self.statusAndAlertInformationBar];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

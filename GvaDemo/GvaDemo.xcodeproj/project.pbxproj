@@ -29,7 +29,6 @@
 		1EEB5BE615CF4BB50021B155 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE515CF4BB50021B155 /* QuartzCore.framework */; };
 		1EEB5BE815CF5AEB0021B155 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BE715CF5AEB0021B155 /* compass.png */; };
 		1EEB5BEA15CF601C0021B155 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE915CF601C0021B155 /* CoreLocation.framework */; };
-		1EEB5BF215CF7C6B0021B155 /* GameKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BF115CF7C6B0021B155 /* GameKitManager.m */; };
 		1EEB5BF715CF9D4C0021B155 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BF615CF9D4C0021B155 /* SBTableAlert.m */; };
 /* End PBXBuildFile section */
 
@@ -63,8 +62,6 @@
 		1EEB5BE515CF4BB50021B155 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1EEB5BE715CF5AEB0021B155 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 		1EEB5BE915CF601C0021B155 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		1EEB5BF015CF7C6B0021B155 /* GameKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameKitManager.h; path = GvaDemo/GameKitManager.h; sourceTree = "<group>"; };
-		1EEB5BF115CF7C6B0021B155 /* GameKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameKitManager.m; path = GvaDemo/GameKitManager.m; sourceTree = "<group>"; };
 		1EEB5BF515CF9D4C0021B155 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
 		1EEB5BF615CF9D4C0021B155 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -134,7 +131,6 @@
 			isa = PBXGroup;
 			children = (
 				1EEB5BF415CF987D0021B155 /* SBTableAlert */,
-				1EEB5BEF15CF7C240021B155 /* GameKitManager */,
 				1EEB5BC915CF46040021B155 /* GvaView */,
 				1EEB5BC115CF436E0021B155 /* MainScreen */,
 				1EEB5BA215CF40E60021B155 /* Supporting Files */,
@@ -184,16 +180,6 @@
 				1EEB5BE715CF5AEB0021B155 /* compass.png */,
 			);
 			name = Images;
-			sourceTree = "<group>";
-		};
-		1EEB5BEF15CF7C240021B155 /* GameKitManager */ = {
-			isa = PBXGroup;
-			children = (
-				1EEB5BF015CF7C6B0021B155 /* GameKitManager.h */,
-				1EEB5BF115CF7C6B0021B155 /* GameKitManager.m */,
-			);
-			name = GameKitManager;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		1EEB5BF415CF987D0021B155 /* SBTableAlert */ = {
@@ -276,7 +262,6 @@
 				1EEB5BB215CF40E70021B155 /* GvaDemoViewController.m in Sources */,
 				1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */,
 				1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */,
-				1EEB5BF215CF7C6B0021B155 /* GameKitManager.m in Sources */,
 				1EEB5BF715CF9D4C0021B155 /* SBTableAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,6 +380,7 @@
 				1EEB5BB715CF40E70021B155 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
