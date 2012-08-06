@@ -15,6 +15,8 @@
 
 #define VIDEO_FRAME                 CGRectMake(143,126-CALIBRATION,738,51)
 
+#define TEXT_VIEW_FRAME             CGRectMake(143,126-CALIBRATION,738,51)
+
 #define FUNCTION_BUTTON             CGRectMake(157.5,30-CALIBRATION,65,65)
 #define FUNCTION_BUTTON_GAP         92
 
@@ -34,6 +36,8 @@
 @property (nonatomic,retain) UIImageView *compass;
 @property (nonatomic,retain) UILabel *statusAndAlertInformationBar;
 
+@property (nonatomic, retain) GKSession *tmpSession;
+
 @end
 
 @implementation GvaViewViewController
@@ -46,6 +50,7 @@
 @synthesize session = _session;
 @synthesize peerID = _peerID;
 @synthesize peerList = _peerList;
+@synthesize tmpSession = _tmpSession;
 
 # pragma mark - Lazy Instantiation
 
@@ -63,14 +68,6 @@
     }
     
     return _statusAndAlertInformationBar;
-}
-
-- (NSMutableArray *)peerList {
-    if (!_peerList) {
-        _peerList = [[NSMutableArray alloc] init];
-    }
-    
-    return _peerList;
 }
 
 # pragma mark - Helper Methods
@@ -150,13 +147,21 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     self.session.available = NO;
     self.session.delegate = nil;
     
-    [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", @"Crew-point"]];
+    if (self.session) {
+        if ([self.mode.text isEqualToString:@"Controller"]) {
+            [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", @"Crew-point"]];
+        } else {
+            [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", @"Controller"]];
+        }
+    } else {
+        [self clearStatusAndAlertInformationBarText];
+    }
+    
 }
 
 - (void)loadPeerList {
     self.peerList = [[NSMutableArray alloc] initWithArray:[self.session peersWithConnectionState:GKPeerStateAvailable]];
 }
-
 
 # pragma mark - Game Kit Picker Methods
 
@@ -165,13 +170,15 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     if (type == GKPeerPickerConnectionTypeOnline) {
 		picker.delegate = nil;
 		[picker dismiss];
-		
-		self.session = [[GKSession alloc] initWithSessionID:nil
+        
+        self.session = [[GKSession alloc] initWithSessionID:nil
                                                 displayName:self.mode.text
                                                 sessionMode:GKSessionModePeer];
-		self.session.delegate = self;
-		self.session.available = YES;
-		[self.session setDataReceiveHandler:self withContext:nil];
+        self.session.delegate = self;
+        [self.session setDataReceiveHandler:self withContext:nil];
+        self.session.available = YES;
+        
+        showAlert(@"Local Wireless Connection is Availabel now.");
 	}
 }
 
@@ -191,20 +198,43 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     [self clearStatusAndAlertInformationBarText];
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", [alertView buttonTitleAtIndex:buttonIndex]]];
+}
+
 #pragma mark - session methods
 
 - (void)session:(GKSession *)session peer:(NSString *)peerID didChangeState:(GKPeerConnectionState)state {
     
     switch (state) {
 		case GKPeerStateAvailable:
-            [self.peerList addObject:peerID];
-
+            [self loadPeerList];
+            
+            NSLog(@"Peer %d Available", [self.peerList count]);
+            
+            if ([self.peerList count] == 0) {
+                showAlert(@"There are no peers available right now.");
+            } else {
+                UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"List of Peers"
+                                                                  message:@"Please select a peer."
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel"
+                                                        otherButtonTitles:nil];
+                
+                [message addButtonWithTitle:[session displayNameForPeer:peerID]];
+                
+                [message show];
+            }
+            
 			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
+            //self.tmpSession = session;
 			[session connectToPeer:peerID withTimeout:10];
 			break;
 			
 		case GKPeerStateConnected:
-			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", [session displayNameForPeer:peerID]]];
+            [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(updateInformationBar) userInfo:nil repeats:NO];
+            
+            //[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", [session displayNameForPeer:peerID]]];
 			self.peerID = peerID;
 			break;
             
@@ -220,6 +250,15 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 			break;
 	}
 }
+
+-(void)updateInformationBar {
+    if ([self.mode.text isEqualToString:@"Controller"]) {
+        [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", @"Crew-point"]];
+    } else {
+        [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", @"Controller"]];
+    }
+}
+
 
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
 	NSError* error = nil;

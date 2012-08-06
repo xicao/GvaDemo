@@ -14,9 +14,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-//#import "GameKitManager.h"
-
-@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GKPeerPickerControllerDelegate,GKSessionDelegate>
+@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GKPeerPickerControllerDelegate,GKSessionDelegate,UIAlertViewDelegate>
 
 @property (nonatomic,retain) CLLocationManager *locationManager;
 
