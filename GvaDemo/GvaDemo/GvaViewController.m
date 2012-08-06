@@ -13,7 +13,7 @@
 
 #define STATUS_INFORMATION_BAR      CGRectMake(143,126-CALIBRATION,738,51)
 
-#define VIDEO_FRAME                 CGRectMake(143,126-CALIBRATION,738,51)
+#define VIDEO_FRAME                 CGRectMake(406.5,113-CALIBRATION,738,51)
 
 #define TEXT_VIEW_FRAME             CGRectMake(143,126-CALIBRATION,738,51)
 
@@ -36,8 +36,7 @@
 @property (nonatomic,retain) UIImageView *compass;
 @property (nonatomic,retain) UILabel *statusAndAlertInformationBar;
 
-@property (nonatomic, retain) GKSession *tmpSession;
-
+@property (nonatomic,retain) UIImageView *videoStreaming;
 @end
 
 @implementation GvaViewViewController
@@ -50,9 +49,17 @@
 @synthesize session = _session;
 @synthesize peerID = _peerID;
 @synthesize peerList = _peerList;
-@synthesize tmpSession = _tmpSession;
+@synthesize videoStreaming = _videoStreaming;
 
 # pragma mark - Lazy Instantiation
+
+- (UIImageView *)videoStreaming {
+    if (!_videoStreaming) {
+        _videoStreaming = [[UIImageView alloc] initWithFrame:VIDEO_FRAME];
+    }
+    
+    return _videoStreaming;
+}
 
 - (UIImageView *)compass {
     if (!_compass) {
@@ -97,6 +104,15 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 #pragma mark - send and receive methods
 
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context {
+	if ([data length] < 1024) {// receive text
+        NSLog(@"text received");
+        
+	} else {// receive image
+		NSLog(@"image received");
+		
+        [self.videoStreaming performSelectorOnMainThread:@selector(setImage:)
+                                         withObject:[UIImage imageWithData:data] waitUntilDone:YES];
+	}
 }
 
 - (void)sentText:(NSString *)message {
@@ -227,7 +243,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
             }
             
 			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
-            //self.tmpSession = session;
+            
 			[session connectToPeer:peerID withTimeout:10];
 			break;
 			

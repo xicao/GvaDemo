@@ -11,6 +11,7 @@
 		1EB11DF215D03E3900E0CC34 /* button_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EB11DEE15D03E3900E0CC34 /* button_grey@2x.png */; };
 		1EB11DF315D03E3900E0CC34 /* button_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EB11DEF15D03E3900E0CC34 /* button_red.png */; };
 		1EB11DF415D03E3900E0CC34 /* button_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EB11DF015D03E3900E0CC34 /* button_red@2x.png */; };
+		1EB11DFD15D063E300E0CC34 /* CaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB11DFC15D063E300E0CC34 /* CaptureSessionManager.m */; };
 		1EEB5B9C15CF40E60021B155 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9B15CF40E60021B155 /* UIKit.framework */; };
 		1EEB5B9E15CF40E60021B155 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9D15CF40E60021B155 /* Foundation.framework */; };
 		1EEB5BA015CF40E60021B155 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9F15CF40E60021B155 /* CoreGraphics.framework */; };
@@ -40,6 +41,8 @@
 		1EB11DEE15D03E3900E0CC34 /* button_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_grey@2x.png"; sourceTree = "<group>"; };
 		1EB11DEF15D03E3900E0CC34 /* button_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_red.png; sourceTree = "<group>"; };
 		1EB11DF015D03E3900E0CC34 /* button_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_red@2x.png"; sourceTree = "<group>"; };
+		1EB11DFB15D063E300E0CC34 /* CaptureSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureSessionManager.h; sourceTree = "<group>"; };
+		1EB11DFC15D063E300E0CC34 /* CaptureSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureSessionManager.m; sourceTree = "<group>"; };
 		1EEB5B9715CF40E60021B155 /* GvaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GvaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EEB5B9B15CF40E60021B155 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1EEB5B9D15CF40E60021B155 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -107,6 +110,15 @@
 			name = Button;
 			sourceTree = "<group>";
 		};
+		1EB11DFA15D063BE00E0CC34 /* AVCaptureSessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				1EB11DFB15D063E300E0CC34 /* CaptureSessionManager.h */,
+				1EB11DFC15D063E300E0CC34 /* CaptureSessionManager.m */,
+			);
+			name = AVCaptureSessionManager;
+			sourceTree = "<group>";
+		};
 		1EEB5B8C15CF40E60021B155 = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +159,7 @@
 		1EEB5BA115CF40E60021B155 /* GvaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				1EB11DFA15D063BE00E0CC34 /* AVCaptureSessionManager */,
 				1EEB5BC915CF46040021B155 /* GvaView */,
 				1EEB5BC115CF436E0021B155 /* MainScreen */,
 				1EEB5BA215CF40E60021B155 /* Supporting Files */,
@@ -273,6 +286,7 @@
 				1EEB5BB215CF40E70021B155 /* GvaDemoViewController.m in Sources */,
 				1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */,
 				1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */,
+				1EB11DFD15D063E300E0CC34 /* CaptureSessionManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
