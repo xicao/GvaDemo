@@ -88,9 +88,9 @@
 
 - (void)reconfigurableButtonsPressed:(UIButton *)sender {
     if ([sender.currentTitle isEqualToString:@"F1"]) {
-       
+        [GameKitManager connect];
     } else if ([sender.currentTitle isEqualToString:@"F2"]) {
-        
+        [GameKitManager disconnect];
     } else if ([sender.currentTitle isEqualToString:@"F3"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F4"]) {
@@ -155,7 +155,6 @@
     //game kit session
     [GameKitManager sharedInstance].sessionID = self.mode.text;
     [GameKitManager sharedInstance].dataDelegate = self;
-    [GameKitManager assignViewController:self];
 }
 
 - (void)viewDidUnload {
@@ -246,5 +245,8 @@
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
 
 @end

@@ -38,7 +38,6 @@
 + (void) connect;
 + (void) disconnect;
 + (void) sendData: (NSData *) data;
-+ (void) assignViewController: (UIViewController *) aViewController;
 
 + (GameKitManager *) sharedInstance;
 

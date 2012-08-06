@@ -30,6 +30,7 @@
 		1EEB5BE815CF5AEB0021B155 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BE715CF5AEB0021B155 /* compass.png */; };
 		1EEB5BEA15CF601C0021B155 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE915CF601C0021B155 /* CoreLocation.framework */; };
 		1EEB5BF215CF7C6B0021B155 /* GameKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BF115CF7C6B0021B155 /* GameKitManager.m */; };
+		1EEB5BF715CF9D4C0021B155 /* SBTableAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BF615CF9D4C0021B155 /* SBTableAlert.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,8 @@
 		1EEB5BE915CF601C0021B155 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1EEB5BF015CF7C6B0021B155 /* GameKitManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameKitManager.h; path = GvaDemo/GameKitManager.h; sourceTree = "<group>"; };
 		1EEB5BF115CF7C6B0021B155 /* GameKitManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameKitManager.m; path = GvaDemo/GameKitManager.m; sourceTree = "<group>"; };
+		1EEB5BF515CF9D4C0021B155 /* SBTableAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBTableAlert.h; sourceTree = "<group>"; };
+		1EEB5BF615CF9D4C0021B155 /* SBTableAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBTableAlert.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,6 +199,8 @@
 		1EEB5BF415CF987D0021B155 /* SBTableAlert */ = {
 			isa = PBXGroup;
 			children = (
+				1EEB5BF515CF9D4C0021B155 /* SBTableAlert.h */,
+				1EEB5BF615CF9D4C0021B155 /* SBTableAlert.m */,
 			);
 			name = SBTableAlert;
 			sourceTree = "<group>";
@@ -272,6 +277,7 @@
 				1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */,
 				1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */,
 				1EEB5BF215CF7C6B0021B155 /* GameKitManager.m in Sources */,
+				1EEB5BF715CF9D4C0021B155 /* SBTableAlert.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

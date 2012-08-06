@@ -24,7 +24,6 @@
 
 #define DO_DATA_CALLBACK(X, Y) if (self.dataDelegate && [self.dataDelegate respondsToSelector:@selector(X)]) [self.dataDelegate performSelector:@selector(X) withObject:Y];
 #define showAlert(format, ...) myShowAlert(__LINE__, (char *)__FUNCTION__, format, ##__VA_ARGS__)
-#define BARBUTTON(TITLE, SELECTOR) 	[[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 
 // Simple Alert Utility
 void myShowAlert(int line, char *functname, id formatstring,...) {
@@ -38,7 +37,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	[av show];
 }
 
-#pragma mark Shared Instance
+#pragma mark - Shared Instance
 
 static GameKitManager *sharedInstance = nil;
 
@@ -47,9 +46,9 @@ static GameKitManager *sharedInstance = nil;
     return sharedInstance;
 }
 
-#pragma mark Data Sharing
+#pragma mark - Data Sharing
 
-- (void) sendDataToPeers:(NSData *) data {
+- (void) sendDataToPeers:(NSData *)data {
 	NSError *error;
 	BOOL didSend = [self.session sendDataToAllPeers:data withDataMode:GKSendDataReliable error:&error];
 	if (!didSend)
@@ -61,14 +60,14 @@ static GameKitManager *sharedInstance = nil;
 	DO_DATA_CALLBACK(receivedData:, data);
 }
 
-#pragma mark Connections
+#pragma mark Connections Method
 
 - (void) startConnection {
 	if (!self.isConnected) {
         GKPeerPickerController* picker = [[GKPeerPickerController alloc] init];
         picker.delegate = self;
-        picker.connectionTypesMask = GKPeerPickerConnectionTypeOnline | GKPeerPickerConnectionTypeNearby;
         
+        picker.connectionTypesMask = GKPeerPickerConnectionTypeOnline | GKPeerPickerConnectionTypeNearby;
         [picker show];
 	}
 }
@@ -78,31 +77,30 @@ static GameKitManager *sharedInstance = nil;
 	picker.delegate = nil;
 }
 
-- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession: (GKSession *) session{
-	[picker dismiss];
-	[self.session setDataReceiveHandler:self withContext:nil];
+- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession: (GKSession *)session{
+    self.session = session;
+	session.delegate = self;
+	[session setDataReceiveHandler:self withContext:nil];
+	picker.delegate = nil;
+    [picker dismiss];
+    
 	self.isConnected = YES;
 	DO_DATA_CALLBACK(connectionEstablished, nil);
 }
 
-- (GKSession *)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type {
-    
+- (void)peerPickerController:(GKPeerPickerController *)picker didSelectConnectionType:(GKPeerPickerConnectionType)type {
     // from Apple - Game Kit Programmiing Guide: Finding Peers with Peer Picker
     if (type == GKPeerPickerConnectionTypeOnline) {
 		picker.delegate = nil;
 		[picker dismiss];
 		
-        if (!self.session) {
-            self.session = [[GKSession alloc] initWithSessionID:(self.sessionID ? self.sessionID : @"Sample Session")
-                                                    displayName:nil
-                                                    sessionMode:GKSessionModePeer];
-            self.session.delegate = self;
-            self.session.available = YES;
-            [self.session setDataReceiveHandler:self withContext:nil];
-        }
+		self.session = [[GKSession alloc] initWithSessionID:(self.sessionID ? self.sessionID : @"Controller")
+                                                displayName:nil
+                                                sessionMode:GKSessionModePeer];
+		self.session.delegate = self;
+		self.session.available = YES;
+		[self.session setDataReceiveHandler:self withContext:nil];
 	}
-    
-	return self.session;
 }
 
 #pragma mark Session Handling
@@ -116,18 +114,18 @@ static GameKitManager *sharedInstance = nil;
     
     switch (state) {
 		case GKPeerStateAvailable:
+            NSLog(@"connecting");
 			[session connectToPeer:peerID withTimeout:10];
 			break;
 			
 		case GKPeerStateConnected:
+            NSLog(@"connected");
 			break;
             
 		case GKPeerStateDisconnected:
             self.isConnected = NO;
             showAlert(@"You are no longer connected to another device.");
             [self disconnect];
-            if (self.viewController)
-                self.viewController.navigationItem.rightBarButtonItem = BARBUTTON(@"Connect", @selector(startConnection));
             DO_DATA_CALLBACK(connectionLost, nil);
             
 		default:
@@ -135,8 +133,20 @@ static GameKitManager *sharedInstance = nil;
 	}
 }
 
-- (void) assignViewController: (UIViewController *) aViewController {
-	self.viewController = aViewController;
+- (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
+	NSError* error = nil;
+	[session acceptConnectionFromPeer:peerID error:&error];
+	if (error) {
+		NSLog(@"%@", error);
+	}
+}
+
+- (void)session:(GKSession *)session connectionWithPeerFailed:(NSString *)peerID withError:(NSError *)error {
+	NSLog(@"%@|%@", peerID, error);
+}
+
+- (void)session:(GKSession *)session didFailWithError:(NSError *)error {
+	NSLog(@"%@", error);
 }
 
 #pragma mark Class utility methods
@@ -151,9 +161,5 @@ static GameKitManager *sharedInstance = nil;
 
 + (void) sendData: (NSData *) data {
 	[[self sharedInstance] sendDataToPeers:data];
-}
-
-+ (void) assignViewController: (UIViewController *) aViewController {
-	[[self sharedInstance] assignViewController:aViewController];
 }
 @end
