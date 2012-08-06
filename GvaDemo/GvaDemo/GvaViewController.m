@@ -9,7 +9,7 @@
 #import "GvaViewController.h"
 #import "GvaView.h"
 
-#define CALIBRATION                 20
+#define CALIBRATION                 22
 
 #define FUNCTION_BUTTON             CGRectMake(157.5,30-CALIBRATION,65,65)
 #define FUNCTION_BUTTON_GAP         92
@@ -123,7 +123,6 @@
             buttonDown.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 35.0];
             [buttonDown addTarget:self action:@selector(commonTaskButtonsPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
         
         [self.gvaView addSubview:buttonDown];
         commonTaskButton.origin.x += COMMON_TASK_BUTTON_GAP;

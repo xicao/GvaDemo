@@ -18,6 +18,16 @@
 		1EEB5BC015CF42FB0021B155 /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BBF15CF42FB0021B155 /* button.png */; };
 		1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BCB15CF46290021B155 /* GvaView.m */; };
 		1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BCD15CF46290021B155 /* GvaViewController.m */; };
+		1EEB5BD615CF4B600021B155 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BD515CF4B600021B155 /* CoreMedia.framework */; };
+		1EEB5BD815CF4B690021B155 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BD715CF4B690021B155 /* CoreMotion.framework */; };
+		1EEB5BDA15CF4B730021B155 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BD915CF4B730021B155 /* ImageIO.framework */; };
+		1EEB5BDC15CF4B7E0021B155 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BDB15CF4B7E0021B155 /* AVFoundation.framework */; };
+		1EEB5BDE15CF4B880021B155 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BDD15CF4B880021B155 /* CoreVideo.framework */; };
+		1EEB5BE015CF4B950021B155 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BDF15CF4B950021B155 /* MobileCoreServices.framework */; };
+		1EEB5BE215CF4B9F0021B155 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE115CF4B9F0021B155 /* GameKit.framework */; };
+		1EEB5BE415CF4BA90021B155 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE315CF4BA90021B155 /* CFNetwork.framework */; };
+		1EEB5BE615CF4BB50021B155 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5BE515CF4BB50021B155 /* QuartzCore.framework */; };
+		1EEB5BE815CF5AEB0021B155 /* compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BE715CF5AEB0021B155 /* compass.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +49,16 @@
 		1EEB5BCB15CF46290021B155 /* GvaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GvaView.m; sourceTree = "<group>"; };
 		1EEB5BCC15CF46290021B155 /* GvaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GvaViewController.h; sourceTree = "<group>"; };
 		1EEB5BCD15CF46290021B155 /* GvaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GvaViewController.m; sourceTree = "<group>"; };
+		1EEB5BD515CF4B600021B155 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		1EEB5BD715CF4B690021B155 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		1EEB5BD915CF4B730021B155 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		1EEB5BDB15CF4B7E0021B155 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		1EEB5BDD15CF4B880021B155 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		1EEB5BDF15CF4B950021B155 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		1EEB5BE115CF4B9F0021B155 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		1EEB5BE315CF4BA90021B155 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		1EEB5BE515CF4BB50021B155 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1EEB5BE715CF5AEB0021B155 /* compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compass.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +66,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EEB5BE615CF4BB50021B155 /* QuartzCore.framework in Frameworks */,
+				1EEB5BE415CF4BA90021B155 /* CFNetwork.framework in Frameworks */,
+				1EEB5BE215CF4B9F0021B155 /* GameKit.framework in Frameworks */,
+				1EEB5BE015CF4B950021B155 /* MobileCoreServices.framework in Frameworks */,
+				1EEB5BDE15CF4B880021B155 /* CoreVideo.framework in Frameworks */,
+				1EEB5BDC15CF4B7E0021B155 /* AVFoundation.framework in Frameworks */,
+				1EEB5BDA15CF4B730021B155 /* ImageIO.framework in Frameworks */,
+				1EEB5BD815CF4B690021B155 /* CoreMotion.framework in Frameworks */,
+				1EEB5BD615CF4B600021B155 /* CoreMedia.framework in Frameworks */,
 				1EEB5B9C15CF40E60021B155 /* UIKit.framework in Frameworks */,
 				1EEB5B9E15CF40E60021B155 /* Foundation.framework in Frameworks */,
 				1EEB5BA015CF40E60021B155 /* CoreGraphics.framework in Frameworks */,
@@ -75,6 +104,15 @@
 		1EEB5B9A15CF40E60021B155 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1EEB5BE515CF4BB50021B155 /* QuartzCore.framework */,
+				1EEB5BE315CF4BA90021B155 /* CFNetwork.framework */,
+				1EEB5BE115CF4B9F0021B155 /* GameKit.framework */,
+				1EEB5BDF15CF4B950021B155 /* MobileCoreServices.framework */,
+				1EEB5BDD15CF4B880021B155 /* CoreVideo.framework */,
+				1EEB5BDB15CF4B7E0021B155 /* AVFoundation.framework */,
+				1EEB5BD915CF4B730021B155 /* ImageIO.framework */,
+				1EEB5BD715CF4B690021B155 /* CoreMotion.framework */,
+				1EEB5BD515CF4B600021B155 /* CoreMedia.framework */,
 				1EEB5B9B15CF40E60021B155 /* UIKit.framework */,
 				1EEB5B9D15CF40E60021B155 /* Foundation.framework */,
 				1EEB5B9F15CF40E60021B155 /* CoreGraphics.framework */,
@@ -131,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				1EEB5BBF15CF42FB0021B155 /* button.png */,
+				1EEB5BE715CF5AEB0021B155 /* compass.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -190,6 +229,7 @@
 				1EEB5BA615CF40E70021B155 /* InfoPlist.strings in Resources */,
 				1EEB5BAF15CF40E70021B155 /* MainStoryboard.storyboard in Resources */,
 				1EEB5BC015CF42FB0021B155 /* button.png in Resources */,
+				1EEB5BE815CF5AEB0021B155 /* compass.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
