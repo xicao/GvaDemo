@@ -25,7 +25,8 @@
 
 @property (nonatomic) int functionLabelNotifier;
 
-@property (nonatomic, retain) GKSession* session;
-@property (nonatomic, retain) NSString* peerID;
+@property (nonatomic, retain) GKSession *session;
+@property (nonatomic, retain) NSString *peerID;
+@property (nonatomic, retain) NSMutableArray *peerList;
 
 @end

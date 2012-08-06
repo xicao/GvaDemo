@@ -45,6 +45,7 @@
 @synthesize locationManager = _locationManager;
 @synthesize session = _session;
 @synthesize peerID = _peerID;
+@synthesize peerList = _peerList;
 
 # pragma mark - Lazy Instantiation
 
@@ -62,6 +63,14 @@
     }
     
     return _statusAndAlertInformationBar;
+}
+
+- (NSMutableArray *)peerList {
+    if (!_peerList) {
+        _peerList = [[NSMutableArray alloc] init];
+    }
+    
+    return _peerList;
 }
 
 # pragma mark - Helper Methods
@@ -134,11 +143,20 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     [picker show];
 }
 
-- (void)disConnect {
+- (void)disconnect {
+    //[self loadPeerList];
+    
     [self.session disconnectFromAllPeers];
     self.session.available = NO;
     self.session.delegate = nil;
+    
+    [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", @"Crew-point"]];
 }
+
+- (void)loadPeerList {
+    self.peerList = [[NSMutableArray alloc] initWithArray:[self.session peersWithConnectionState:GKPeerStateAvailable]];
+}
+
 
 # pragma mark - Game Kit Picker Methods
 
@@ -179,6 +197,8 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     
     switch (state) {
 		case GKPeerStateAvailable:
+            [self.peerList addObject:peerID];
+
 			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
 			[session connectToPeer:peerID withTimeout:10];
 			break;
@@ -191,6 +211,10 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 		case GKPeerStateDisconnected:
 			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", [session displayNameForPeer:peerID]]];
 			self.session = nil;
+            
+        case GKPeerStateUnavailable:
+            [self.peerList removeObject:peerID];
+            break;
             
 		default:
 			break;
@@ -248,7 +272,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     if ([sender.currentTitle isEqualToString:@"F1"]) {
         [self connect];
     } else if ([sender.currentTitle isEqualToString:@"F2"]) {
-        [self disConnect];
+        [self disconnect];
     } else if ([sender.currentTitle isEqualToString:@"F3"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F4"]) {
@@ -292,7 +316,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 
 # pragma mark - View Methods
 
-- (void)setGvaView:(GvaView *)gvaView { //reflash our view every time 
+- (void)setGvaView:(GvaView *)gvaView { //reflash our view every time
     _gvaView = gvaView;
     [self.gvaView setBackgroundColor:[UIColor lightGrayColor]];
     [self.gvaView setNeedsDisplay];
@@ -409,8 +433,12 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
 }
 
 @end
