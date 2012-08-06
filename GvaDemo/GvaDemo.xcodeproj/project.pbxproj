@@ -1,0 +1,329 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1EEB5B9C15CF40E60021B155 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9B15CF40E60021B155 /* UIKit.framework */; };
+		1EEB5B9E15CF40E60021B155 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9D15CF40E60021B155 /* Foundation.framework */; };
+		1EEB5BA015CF40E60021B155 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EEB5B9F15CF40E60021B155 /* CoreGraphics.framework */; };
+		1EEB5BA615CF40E70021B155 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BA415CF40E60021B155 /* InfoPlist.strings */; };
+		1EEB5BA815CF40E70021B155 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BA715CF40E70021B155 /* main.m */; };
+		1EEB5BAC15CF40E70021B155 /* GvaDemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BAB15CF40E70021B155 /* GvaDemoAppDelegate.m */; };
+		1EEB5BAF15CF40E70021B155 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BAD15CF40E70021B155 /* MainStoryboard.storyboard */; };
+		1EEB5BB215CF40E70021B155 /* GvaDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BB115CF40E70021B155 /* GvaDemoViewController.m */; };
+		1EEB5BC015CF42FB0021B155 /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EEB5BBF15CF42FB0021B155 /* button.png */; };
+		1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BCB15CF46290021B155 /* GvaView.m */; };
+		1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB5BCD15CF46290021B155 /* GvaViewController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1EEB5B9715CF40E60021B155 /* GvaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GvaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EEB5B9B15CF40E60021B155 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1EEB5B9D15CF40E60021B155 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1EEB5B9F15CF40E60021B155 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1EEB5BA315CF40E60021B155 /* GvaDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GvaDemo-Info.plist"; sourceTree = "<group>"; };
+		1EEB5BA515CF40E60021B155 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1EEB5BA715CF40E70021B155 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1EEB5BA915CF40E70021B155 /* GvaDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GvaDemo-Prefix.pch"; sourceTree = "<group>"; };
+		1EEB5BAA15CF40E70021B155 /* GvaDemoAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GvaDemoAppDelegate.h; sourceTree = "<group>"; };
+		1EEB5BAB15CF40E70021B155 /* GvaDemoAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GvaDemoAppDelegate.m; sourceTree = "<group>"; };
+		1EEB5BAE15CF40E70021B155 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		1EEB5BB015CF40E70021B155 /* GvaDemoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GvaDemoViewController.h; sourceTree = "<group>"; };
+		1EEB5BB115CF40E70021B155 /* GvaDemoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GvaDemoViewController.m; sourceTree = "<group>"; };
+		1EEB5BBF15CF42FB0021B155 /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button.png; sourceTree = "<group>"; };
+		1EEB5BCA15CF46290021B155 /* GvaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GvaView.h; sourceTree = "<group>"; };
+		1EEB5BCB15CF46290021B155 /* GvaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GvaView.m; sourceTree = "<group>"; };
+		1EEB5BCC15CF46290021B155 /* GvaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GvaViewController.h; sourceTree = "<group>"; };
+		1EEB5BCD15CF46290021B155 /* GvaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GvaViewController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1EEB5B9415CF40E60021B155 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EEB5B9C15CF40E60021B155 /* UIKit.framework in Frameworks */,
+				1EEB5B9E15CF40E60021B155 /* Foundation.framework in Frameworks */,
+				1EEB5BA015CF40E60021B155 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1EEB5B8C15CF40E60021B155 = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BA115CF40E60021B155 /* GvaDemo */,
+				1EEB5B9A15CF40E60021B155 /* Frameworks */,
+				1EEB5B9815CF40E60021B155 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1EEB5B9815CF40E60021B155 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5B9715CF40E60021B155 /* GvaDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1EEB5B9A15CF40E60021B155 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5B9B15CF40E60021B155 /* UIKit.framework */,
+				1EEB5B9D15CF40E60021B155 /* Foundation.framework */,
+				1EEB5B9F15CF40E60021B155 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1EEB5BA115CF40E60021B155 /* GvaDemo */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BC915CF46040021B155 /* GvaView */,
+				1EEB5BC115CF436E0021B155 /* MainScreen */,
+				1EEB5BA215CF40E60021B155 /* Supporting Files */,
+			);
+			path = GvaDemo;
+			sourceTree = "<group>";
+		};
+		1EEB5BA215CF40E60021B155 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BD415CF4A010021B155 /* Images */,
+				1EEB5BAD15CF40E70021B155 /* MainStoryboard.storyboard */,
+				1EEB5BA315CF40E60021B155 /* GvaDemo-Info.plist */,
+				1EEB5BA415CF40E60021B155 /* InfoPlist.strings */,
+				1EEB5BA715CF40E70021B155 /* main.m */,
+				1EEB5BA915CF40E70021B155 /* GvaDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1EEB5BC115CF436E0021B155 /* MainScreen */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BAA15CF40E70021B155 /* GvaDemoAppDelegate.h */,
+				1EEB5BAB15CF40E70021B155 /* GvaDemoAppDelegate.m */,
+				1EEB5BB015CF40E70021B155 /* GvaDemoViewController.h */,
+				1EEB5BB115CF40E70021B155 /* GvaDemoViewController.m */,
+			);
+			name = MainScreen;
+			sourceTree = "<group>";
+		};
+		1EEB5BC915CF46040021B155 /* GvaView */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BCA15CF46290021B155 /* GvaView.h */,
+				1EEB5BCB15CF46290021B155 /* GvaView.m */,
+				1EEB5BCC15CF46290021B155 /* GvaViewController.h */,
+				1EEB5BCD15CF46290021B155 /* GvaViewController.m */,
+			);
+			name = GvaView;
+			sourceTree = "<group>";
+		};
+		1EEB5BD415CF4A010021B155 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				1EEB5BBF15CF42FB0021B155 /* button.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1EEB5B9615CF40E60021B155 /* GvaDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1EEB5BB515CF40E70021B155 /* Build configuration list for PBXNativeTarget "GvaDemo" */;
+			buildPhases = (
+				1EEB5B9315CF40E60021B155 /* Sources */,
+				1EEB5B9415CF40E60021B155 /* Frameworks */,
+				1EEB5B9515CF40E60021B155 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GvaDemo;
+			productName = GvaDemo;
+			productReference = 1EEB5B9715CF40E60021B155 /* GvaDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1EEB5B8E15CF40E60021B155 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = GvaDemo;
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = xic;
+			};
+			buildConfigurationList = 1EEB5B9115CF40E60021B155 /* Build configuration list for PBXProject "GvaDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 1EEB5B8C15CF40E60021B155;
+			productRefGroup = 1EEB5B9815CF40E60021B155 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1EEB5B9615CF40E60021B155 /* GvaDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1EEB5B9515CF40E60021B155 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EEB5BA615CF40E70021B155 /* InfoPlist.strings in Resources */,
+				1EEB5BAF15CF40E70021B155 /* MainStoryboard.storyboard in Resources */,
+				1EEB5BC015CF42FB0021B155 /* button.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1EEB5B9315CF40E60021B155 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1EEB5BA815CF40E70021B155 /* main.m in Sources */,
+				1EEB5BAC15CF40E70021B155 /* GvaDemoAppDelegate.m in Sources */,
+				1EEB5BB215CF40E70021B155 /* GvaDemoViewController.m in Sources */,
+				1EEB5BCE15CF46290021B155 /* GvaView.m in Sources */,
+				1EEB5BCF15CF46290021B155 /* GvaViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1EEB5BA415CF40E60021B155 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1EEB5BA515CF40E60021B155 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1EEB5BAD15CF40E70021B155 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1EEB5BAE15CF40E70021B155 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1EEB5BB315CF40E70021B155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		1EEB5BB415CF40E70021B155 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1EEB5BB615CF40E70021B155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GvaDemo/GvaDemo-Prefix.pch";
+				INFOPLIST_FILE = "GvaDemo/GvaDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		1EEB5BB715CF40E70021B155 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "GvaDemo/GvaDemo-Prefix.pch";
+				INFOPLIST_FILE = "GvaDemo/GvaDemo-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1EEB5B9115CF40E60021B155 /* Build configuration list for PBXProject "GvaDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EEB5BB315CF40E70021B155 /* Debug */,
+				1EEB5BB415CF40E70021B155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1EEB5BB515CF40E70021B155 /* Build configuration list for PBXNativeTarget "GvaDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1EEB5BB615CF40E70021B155 /* Debug */,
+				1EEB5BB715CF40E70021B155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1EEB5B8E15CF40E60021B155 /* Project object */;
+}
