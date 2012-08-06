@@ -13,7 +13,7 @@
 
 #define STATUS_INFORMATION_BAR      CGRectMake(143,126-CALIBRATION,738,51)
 
-#define VIDEO_FRAME                 CGRectMake(406.5,113-CALIBRATION,738,51)
+#define VIDEO_FRAME                 CGRectMake(360,185-CALIBRATION,400,400)
 
 #define TEXT_VIEW_FRAME             CGRectMake(143,126-CALIBRATION,738,51)
 
@@ -34,9 +34,14 @@
 @property (nonatomic, weak) IBOutlet GvaView *gvaView;
 
 @property (nonatomic,retain) UIImageView *compass;
+
 @property (nonatomic,retain) UILabel *statusAndAlertInformationBar;
 
 @property (nonatomic,retain) UIImageView *videoStreaming;
+@property (nonatomic, retain) AVCaptureVideoDataOutput *videoOutput;
+@property (nonatomic, retain) AVCaptureSession *captureSession;
+
+@property (nonatomic,retain) NSString *ready2connect;
 @end
 
 @implementation GvaViewViewController
@@ -50,6 +55,8 @@
 @synthesize peerID = _peerID;
 @synthesize peerList = _peerList;
 @synthesize videoStreaming = _videoStreaming;
+@synthesize videoOutput = _videoOutput;
+@synthesize captureSession = _captureSession;
 
 # pragma mark - Lazy Instantiation
 
@@ -77,6 +84,22 @@
     return _statusAndAlertInformationBar;
 }
 
+- (AVCaptureVideoDataOutput *)videoOutput {
+    if (!_videoOutput) {
+        _videoOutput = [[AVCaptureVideoDataOutput alloc]init];
+    }
+    
+    return _videoOutput;
+}
+
+- (AVCaptureSession *)captureSession {
+    if (!_captureSession) {
+        _captureSession = [[AVCaptureSession alloc]init];
+    }
+    
+    return _captureSession;
+}
+
 # pragma mark - Helper Methods
 
 #define showAlert(format, ...) myShowAlert(__LINE__, (char *)__FUNCTION__, format, ##__VA_ARGS__)
@@ -101,11 +124,91 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     self.statusAndAlertInformationBar.text = [self.statusAndAlertInformationBar.text stringByAppendingString:info];
 }
 
+- (void)textChat {
+    
+}
+
+- (void)startVideoStreaming {
+    NSArray *devices = [AVCaptureDevice devices];
+    AVCaptureDevice *frontCamera;
+    AVCaptureDevice *backCamera;
+    
+    for (AVCaptureDevice *device in devices) {
+        NSLog(@"Device name: %@", [device localizedName]);
+        
+        if ([device hasMediaType:AVMediaTypeVideo]) {
+            if ([device position] == AVCaptureDevicePositionBack) {
+                NSLog(@"Device position : back");
+                backCamera = device;
+            } else {
+                NSLog(@"Device position : front");
+                frontCamera = device;
+            }
+        }
+    }
+    
+    NSError *error = nil;
+    AVCaptureDeviceInput *backFacingCameraDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:backCamera error:&error];
+    
+    self.videoOutput.alwaysDiscardsLateVideoFrames = NO;
+    
+    self.videoOutput.videoSettings = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_32BGRA] forKey:(id)kCVPixelBufferPixelFormatTypeKey];
+    
+    if (!error) {
+        if ([self.captureSession canAddInput:backFacingCameraDeviceInput]) {
+            [self.captureSession addInput:backFacingCameraDeviceInput];
+        } else {
+            NSLog(@"Couldn't add back facing video input.");
+        }
+        
+        if ([self.captureSession canAddOutput:self.videoOutput]) {
+            [self.captureSession addOutput:self.videoOutput];
+        } else {
+            NSLog(@"Couldn't add back facing video output.");
+        }
+        
+        self.captureSession.sessionPreset = AVCaptureSessionPresetLow;
+        
+        dispatch_queue_t queue = dispatch_queue_create("Start video streaming...", NULL);
+        [self.videoOutput setSampleBufferDelegate:self queue:queue];
+        
+        dispatch_release(queue);
+        [self.captureSession startRunning];
+    }
+}
+
+- (void)captureImage {
+    
+}
+
+- (void)stopVideoStreaming {
+    self.videoStreaming.image = nil;
+    [self.captureSession stopRunning];
+    self.videoStreaming.image = nil;
+    
+    [self sendText:@"iWantToStopVideo"];
+}
+
 #pragma mark - send and receive methods
 
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context {
 	if ([data length] < 1024) {// receive text
         NSLog(@"text received");
+        
+        if ([self.mode.text isEqualToString:@"Crew-point"]) {
+            
+            NSString* text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            if ([text isEqualToString:@"iWantToStopOverlay"]) {
+                //self.scanningLabel.text = @"";
+            } else if ([text isEqualToString:@"iWantToStopVideo"]) {
+                self.videoStreaming.image = nil;
+            } else {
+                //self.scanningLabel.text = [NSString stringWithFormat:@"Receive video streaming from: %@\n", @"Controller"];
+                
+                //self.scanningLabel.text = [self.scanningLabel.text stringByAppendingString:text];
+            }
+        }
         
 	} else {// receive image
 		NSLog(@"image received");
@@ -115,9 +218,9 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	}
 }
 
-- (void)sentText:(NSString *)message {
+- (void)sendText:(NSString *)message {
     if (!self.session) {
-        showAlert(@"You are not connecting to any device.");
+        //showAlert(@"You are not connecting to any device.");
         return;
     }
     
@@ -142,6 +245,57 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	if (error) {
 		NSLog(@"%@", error);
 	}
+}
+
+# pragma mark - AVCapture Methods
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
+    NSData *data = [NSData dataWithBytes:&sampleBuffer length:malloc_size(sampleBuffer)];
+    
+    [self tranferDataToVideo:data];
+}
+
+- (void)tranferDataToVideo:(NSData *)data {
+    
+    CMSampleBufferRef sampleBuffer;
+    [data getBytes:&sampleBuffer length:sizeof(sampleBuffer)];
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CVPixelBufferLockBaseAddress(imageBuffer,0);
+    uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress(imageBuffer);
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer);
+    size_t width = CVPixelBufferGetWidth(imageBuffer);
+    size_t height = CVPixelBufferGetHeight(imageBuffer);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef newContext = CGBitmapContextCreate(baseAddress,
+                                                    width,
+                                                    height,
+                                                    8,
+                                                    bytesPerRow,
+                                                    colorSpace,
+                                                    kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    
+    CGImageRef newImage = CGBitmapContextCreateImage(newContext);
+    
+    CGContextRelease(newContext);
+    CGColorSpaceRelease(colorSpace);
+    
+    UIImage *image = [UIImage imageWithCGImage:newImage
+                                         scale:1.0
+                                   orientation:UIImageOrientationUp];
+    
+    CGImageRelease(newImage);
+    
+    
+    [self.videoStreaming performSelectorOnMainThread:@selector(setImage:)
+                                     withObject:image waitUntilDone:YES];
+    
+    CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+    
+    if ([self.mode.text isEqualToString:@"Controller"] && self.session != nil) {
+        [self sendImage:image];
+    }
 }
 
 # pragma mark - Connection Methods
@@ -173,6 +327,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
         [self clearStatusAndAlertInformationBarText];
     }
     
+    self.session = nil;
 }
 
 - (void)loadPeerList {
@@ -194,7 +349,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
         [self.session setDataReceiveHandler:self withContext:nil];
         self.session.available = YES;
         
-        showAlert(@"Local Wireless Connection is Availabel now.");
+        //showAlert(@"Local wireless connection is availabel now.");
 	}
 }
 
@@ -215,7 +370,9 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connected to %@.", [alertView buttonTitleAtIndex:buttonIndex]]];
+    self.ready2connect = [NSString stringWithString:[alertView buttonTitleAtIndex:buttonIndex]];
+    
+    NSLog(@"%@",self.ready2connect);
 }
 
 #pragma mark - session methods
@@ -242,9 +399,15 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
                 [message show];
             }
             
-			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
-            
-			[session connectToPeer:peerID withTimeout:10];
+            if ([self.ready2connect isEqualToString:@"Cancel"]) {
+                showAlert(@"Connection is canceled.");
+                
+            } else {
+                [self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Connecting to %@ ...", [session displayNameForPeer:peerID]]];
+                
+                [session connectToPeer:peerID withTimeout:10];
+            }
+
 			break;
 			
 		case GKPeerStateConnected:
@@ -329,13 +492,18 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     } else if ([sender.currentTitle isEqualToString:@"F2"]) {
         [self disconnect];
     } else if ([sender.currentTitle isEqualToString:@"F3"]) {
-        
+        [self textChat];
     } else if ([sender.currentTitle isEqualToString:@"F4"]) {
+        if ([self.mode.text isEqualToString:@"Controller"]) {
+            [self startVideoStreaming];
+        } else {
+            showAlert(@"Only controller can use this function.");
+        }
         
     } else if ([sender.currentTitle isEqualToString:@"F5"]) {
-        
+        [self captureImage];
     } else if ([sender.currentTitle isEqualToString:@"F6"]) {
-        
+        [self stopVideoStreaming];
     } else if ([sender.currentTitle isEqualToString:@"F7"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F8"]) {
@@ -480,6 +648,9 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     //self.statusAndAlertInformationBar.backgroundColor = nil;
     self.statusAndAlertInformationBar.numberOfLines = 3;
     [self.gvaView addSubview:self.statusAndAlertInformationBar];
+    
+    //add view streaming window
+    [self.gvaView addSubview:self.videoStreaming];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

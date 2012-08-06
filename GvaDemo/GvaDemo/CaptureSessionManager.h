@@ -14,4 +14,6 @@
 - (void)captureStillImage;
 - (void)addVideoInputFrontCamera:(BOOL)front;
 
+
+
 @end

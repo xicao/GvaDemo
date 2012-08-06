@@ -14,7 +14,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GKPeerPickerControllerDelegate,GKSessionDelegate,UIAlertViewDelegate>
+#import "CaptureSessionManager.h"
+
+@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GKPeerPickerControllerDelegate,GKSessionDelegate,UIAlertViewDelegate,AVCaptureVideoDataOutputSampleBufferDelegate>
 
 @property (nonatomic,retain) CLLocationManager *locationManager;
 
