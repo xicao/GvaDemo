@@ -49,16 +49,68 @@
     return _compass;
 }
 
+# pragma mark - Game Kit Session Methods
+
+- (void)receivedData:(NSData *)data {
+    
+}
+
 # pragma mark - Button Methods
 
-- (void)functionalAreaSelectionButtonsPressed:(UIButton *)sender {
+- (void)functionButtonsPressed:(UIButton *)sender {
     // highlight current functional area label
     [self.gvaView functionLabelSelected:sender.currentTitle];
+    
+    if ([sender.currentTitle isEqualToString:@"SA"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"WPN"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"DEF"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"SYS"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"DRV"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"STR"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"COM"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"BMS"]) {
+        
+    }
 }
 
 - (void)commonTaskButtonsPressed:(UIButton *)sender {
     if ([sender.currentTitle isEqualToString:@"F20"]) {//back to main screen
         [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void)reconfigurableButtonsPressed:(UIButton *)sender {
+    if ([sender.currentTitle isEqualToString:@"F1"]) {
+       
+    } else if ([sender.currentTitle isEqualToString:@"F2"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F3"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F4"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F5"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F6"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F7"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F8"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F9"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F10"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F11"]) {
+        
+    } else if ([sender.currentTitle isEqualToString:@"F12"]) {
+        
     }
 }
 
@@ -92,12 +144,18 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
+    // core location
     self.locationManager = [[CLLocationManager alloc] init];
 	self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     self.locationManager.distanceFilter = kCLDistanceFilterNone;
 	self.locationManager.headingFilter = 1;
 	self.locationManager.delegate = self;
 	[self.locationManager startUpdatingHeading];
+    
+    //game kit session
+    [GameKitManager sharedInstance].sessionID = self.mode.text;
+    [GameKitManager sharedInstance].dataDelegate = self;
+    [GameKitManager assignViewController:self];
 }
 
 - (void)viewDidUnload {
@@ -133,10 +191,12 @@
             [buttonLeft setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [buttonLeft setTitle:(NSString *)[buttonText objectAtIndex:i] forState:UIControlStateNormal];
             buttonLeft.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 35.0];
+            [buttonLeft addTarget:self action:@selector(reconfigurableButtonsPressed:) forControlEvents:UIControlEventTouchUpInside];
             
             [buttonRight setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [buttonRight setTitle:(NSString *)[buttonText objectAtIndex:(i + 6)] forState:UIControlStateNormal];
             buttonRight.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 35.0];
+            [buttonRight addTarget:self action:@selector(reconfigurableButtonsPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         [self.gvaView addSubview:buttonLeft];
@@ -160,7 +220,7 @@
             [buttonUp setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [buttonUp setTitle:(NSString *)[buttonText objectAtIndex:(i + 20)] forState:UIControlStateNormal];
             buttonUp.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 27.0];
-            [buttonUp addTarget:self action:@selector(functionalAreaSelectionButtonsPressed:) forControlEvents:UIControlEventTouchUpInside];
+            [buttonUp addTarget:self action:@selector(functionButtonsPressed:) forControlEvents:UIControlEventTouchUpInside];
             
             [buttonDown setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [buttonDown setTitle:(NSString *)[buttonText objectAtIndex:(i + 12)] forState:UIControlStateNormal];

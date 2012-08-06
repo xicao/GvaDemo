@@ -130,6 +130,7 @@
 		1EEB5BA115CF40E60021B155 /* GvaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				1EEB5BF415CF987D0021B155 /* SBTableAlert */,
 				1EEB5BEF15CF7C240021B155 /* GameKitManager */,
 				1EEB5BC915CF46040021B155 /* GvaView */,
 				1EEB5BC115CF436E0021B155 /* MainScreen */,
@@ -190,6 +191,13 @@
 			);
 			name = GameKitManager;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		1EEB5BF415CF987D0021B155 /* SBTableAlert */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = SBTableAlert;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
