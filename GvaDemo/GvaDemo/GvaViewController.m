@@ -25,7 +25,7 @@
 #define RECONFIGURABEL_BUTTON_RIGHT CGRectMake(895,185-CALIBRATION,63,60)
 #define RECONFIGURABEL_BUTTON_GAP   68
 
-#define COMPASS                     CGRectMake(248,185-CALIBRATION,100,106)
+#define COMPASS                     CGRectMake(248,185-CALIBRATION,103.6,110.4)
 
 @interface GvaViewViewController ()
 
