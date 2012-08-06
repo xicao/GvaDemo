@@ -33,8 +33,8 @@
 
 #pragma mark - name of labels
 
-#define F1 @""
-#define F2 @""
+#define F1 @"CONNECT"
+#define F2 @"DISCONNECT"
 #define F3 @""
 #define F4 @""
 #define F5 @""
@@ -150,11 +150,11 @@
         if ([[labelText objectAtIndex:i] isKindOfClass:[NSString class]] &&
             [[labelText objectAtIndex:(i + 6)] isKindOfClass:[NSString class]]) {
             
-            [label1 setFont:[UIFont fontWithName:@"Courier" size: 20.0]];
+            [label1 setFont:[UIFont fontWithName:@"Courier" size: 16.0]];
             [label1 setTextAlignment:UITextAlignmentCenter];
             [label1 setText:(NSString *)[labelText objectAtIndex:i]];
             
-            [label2 setFont:[UIFont fontWithName:@"Courier" size: 20.0]];
+            [label2 setFont:[UIFont fontWithName:@"Courier" size: 16.0]];
             [label2 setTextAlignment:UITextAlignmentCenter];
             [label2 setText:(NSString *)[labelText objectAtIndex:(i + 6)]];
         }

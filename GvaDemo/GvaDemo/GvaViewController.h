@@ -14,11 +14,13 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate>
+#import "GameKitManager.h"
+
+@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate, GameKitManagerDataDelegate>
 
 @property (nonatomic,retain) CLLocationManager *locationManager;
 
-//use to distinguish controller and crew-point
+//use to idetify controller and crew-point
 @property (weak, nonatomic) IBOutlet UILabel *mode;
 
 @property (nonatomic) int functionLabelNotifier;

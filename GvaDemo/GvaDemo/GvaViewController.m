@@ -101,9 +101,10 @@
 }
 
 - (void)viewDidUnload {
-    [self setMode:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    
+    [self setMode:nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
