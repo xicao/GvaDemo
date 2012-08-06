@@ -21,8 +21,14 @@
 #define RECONFIGURABEL_BUTTON_RIGHT CGRectMake(895,185-CALIBRATION,63,60)
 #define RECONFIGURABEL_BUTTON_GAP   68
 
+#define COMPASS                     CGRectMake(248,185-CALIBRATION,100,106)
+
 @interface GvaViewViewController ()
+
 @property (nonatomic, weak) IBOutlet GvaView *gvaView;
+
+@property (nonatomic,retain) UIImageView *compass;
+
 @end
 
 @implementation GvaViewViewController
@@ -30,8 +36,20 @@
 @synthesize mode = _mode;
 @synthesize functionLabelNotifier = _functionLabelNotifier;
 @synthesize gvaView = _gvaView;
+@synthesize compass = _compass;
+@synthesize locationManager = _locationManager;
 
-# pragma mark - Button methods
+# pragma mark - Lazy Instantiation
+
+- (UIImageView *)compass {
+    if (!_compass) {
+        _compass = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"compass.png"]];
+    }
+    
+    return _compass;
+}
+
+# pragma mark - Button Methods
 
 - (void)functionalAreaSelectionButtonsPressed:(UIButton *)sender {
     // highlight current functional area label
@@ -44,6 +62,24 @@
     }
 }
 
+# pragma mark - Location and Compass Methods
+
+#pragma mark - referene: http://blog.objectgraph.com/index.php/2012/01/10/how-to-create-a-compass-in-iphone/
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+	// Convert Degree to Radian and move the needle
+	float oldRad = -manager.heading.trueHeading * M_PI / 180.0f;
+	float newRad = -newHeading.trueHeading * M_PI / 180.0f;
+	CABasicAnimation * theAnimation;
+    theAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    theAnimation.fromValue = [NSNumber numberWithFloat:oldRad];
+    theAnimation.toValue = [NSNumber numberWithFloat:newRad];
+    theAnimation.duration = 0.5f;
+    [self.compass.layer addAnimation:theAnimation forKey:@"animateMyRotation"];
+    self.compass.transform = CGAffineTransformMakeRotation(newRad);
+	//NSLog(@"%f (%f) => %f (%f)", manager.heading.trueHeading, oldRad, newHeading.trueHeading, newRad);
+}
+
+
 # pragma mark - View Methods
 
 - (void)setGvaView:(GvaView *)gvaView { //reflash our view every time 
@@ -55,6 +91,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+	self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
+	self.locationManager.headingFilter = 1;
+	self.locationManager.delegate = self;
+	[self.locationManager startUpdatingHeading];
 }
 
 - (void)viewDidUnload {
@@ -130,6 +173,10 @@
         [self.gvaView addSubview:buttonUp];
         functionButton.origin.x += FUNCTION_BUTTON_GAP;
     }
+    
+    // add compass
+    [self.compass setFrame:COMPASS];
+    [self.gvaView addSubview:self.compass];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

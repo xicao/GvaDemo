@@ -14,7 +14,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
-@interface GvaViewViewController : UIViewController
+@interface GvaViewViewController : UIViewController <CLLocationManagerDelegate>
+
+@property (nonatomic,retain) CLLocationManager *locationManager;
 
 //use to distinguish controller and crew-point
 @property (weak, nonatomic) IBOutlet UILabel *mode;

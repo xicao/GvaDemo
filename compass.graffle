@@ -50,8 +50,36 @@
 	<key>GraphicsList</key>
 	<array>
 		<dict>
+			<key>Class</key>
+			<string>LineGraphic</string>
+			<key>ID</key>
+			<integer>16</integer>
+			<key>Points</key>
+			<array>
+				<string>{402.94501, 268.14499}</string>
+				<string>{403, 83}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>stroke</key>
+				<dict>
+					<key>HeadArrow</key>
+					<string>0</string>
+					<key>TailArrow</key>
+					<string>0</string>
+					<key>Width</key>
+					<real>4</real>
+				</dict>
+			</dict>
+			<key>Tail</key>
+			<dict>
+				<key>ID</key>
+				<integer>13</integer>
+			</dict>
+		</dict>
+		<dict>
 			<key>Bounds</key>
-			<string>{{612.45056, 238.60446}, {35.039394, 60.681118}}</string>
+			<string>{{607, 237.80444}, {35.039394, 60.681118}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -102,7 +130,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{158.40009, 238.60446}, {48.713303, 60.681118}}</string>
+			<string>{{150.17674, 237.80444}, {48.713303, 60.681118}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -153,7 +181,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{392.26236, 463.20901}, {35.039394, 60.681118}}</string>
+			<string>{{385.42532, 466.57019}, {35.039394, 60.681118}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -204,7 +232,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{387.56192, 14}, {37.603252, 60.681118}}</string>
+			<string>{{384.14337, 9.0386658}, {37.603252, 60.681118}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -256,12 +284,17 @@
 		<dict>
 			<key>Class</key>
 			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
+				<integer>13</integer>
+			</dict>
 			<key>ID</key>
-			<integer>7</integer>
+			<integer>14</integer>
 			<key>Points</key>
 			<array>
-				<string>{409.78204, 268.94501}</string>
-				<string>{410.08545, 99.168503}</string>
+				<string>{402.94501, 268.14499}</string>
+				<string>{402.94501, 268.14499}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -278,16 +311,16 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>3</integer>
+				<integer>13</integer>
 			</dict>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{213.21959, 74.681183}, {393.12491, 388.52768}}</string>
+			<string>{{204.51981, 69.719788}, {396.8504, 396.8504}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>3</integer>
+			<integer>13</integer>
 			<key>Shape</key>
 			<string>Circle</string>
 			<key>Style</key>
@@ -352,7 +385,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2012-08-06 01:12:08 +0000</string>
+	<string>2012-08-06 02:37:45 +0000</string>
 	<key>Modifier</key>
 	<string>Xi Cao</string>
 	<key>NotesVisible</key>

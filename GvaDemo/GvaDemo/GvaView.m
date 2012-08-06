@@ -10,7 +10,7 @@
 
 #pragma mark - application component data
 
-#define CALIBRATION                 20
+#define CALIBRATION                 22
 
 #define STATUS_ALERM_BAR            CGRectMake(142,113-CALIBRATION,740,11)
 #define STATUS_INFORMATION_BAR      CGRectMake(142,113-CALIBRATION,740,65)
@@ -72,6 +72,22 @@
         [self setup];
     }
     return self;
+}
+
+- (void)drawTriangleInContext:(CGContextRef)context {
+    UIGraphicsPushContext(context);
+    CGContextBeginPath(context);
+    
+    CGContextMoveToPoint(context, 297,203);
+    CGContextAddLineToPoint(context, 291, 223);
+    CGContextAddLineToPoint(context, 303, 223);
+    
+    CGContextClosePath(context);
+    
+    [[UIColor blueColor] setFill];
+    [[UIColor blackColor] setStroke];
+    CGContextDrawPath(context, kCGPathFill);
+    UIGraphicsPopContext();
 }
 
 - (void)drawRect:(CGRect)rect inContext:(CGContextRef)context {
@@ -164,7 +180,8 @@
         commonTaskLabel.origin.x += COMMON_TASK_LABEL_GAP;
     }
     
-    // draw a GUI and a compass
+    // draw a GUI
+    [self drawTriangleInContext:context];
 }
 
 - (void)functionLabelSelected:(NSString *)label {
