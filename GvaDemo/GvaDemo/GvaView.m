@@ -80,9 +80,9 @@
     UIGraphicsPushContext(context);
     CGContextBeginPath(context);
     
-    CGContextMoveToPoint(context, 298,203);
-    CGContextAddLineToPoint(context, 292, 223);
-    CGContextAddLineToPoint(context, 304, 223);
+    CGContextMoveToPoint(context, 300,203);
+    CGContextAddLineToPoint(context, 294, 223);
+    CGContextAddLineToPoint(context, 306, 223);
     
     CGContextClosePath(context);
     

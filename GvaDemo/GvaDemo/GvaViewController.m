@@ -17,8 +17,10 @@
 
 #define VIDEO_FRAME                 CGRectMake(360,185-CALIBRATION,400,400)
 
-#define SEND_VIEW_FRAME             CGRectMake(249.5,457-CALIBRATION,249,128)
+#define SEND_VIEW_FRAME             CGRectMake(249.5,457-CALIBRATION,184,128)
 #define RECEIVE_VIEW_FRAME          CGRectMake(249.5,321-CALIBRATION,249,128)
+#define SEND_MESSAGE_BUTTON         CGRectMake(435.5,525-CALIBRATION,63,60)
+#define CLEAR_MESSAGE_BUTTON        CGRectMake(435.5,457-CALIBRATION,63,60)
 
 #define FUNCTION_BUTTON             CGRectMake(157.5,30-CALIBRATION,65,65)
 #define FUNCTION_BUTTON_GAP         92
@@ -51,6 +53,8 @@
 
 @property (nonatomic,retain) UITextView *sendView;
 @property (nonatomic,retain) UITextView *receiveView;
+@property (nonatomic,retain) UIButton *sendMessage;
+@property (nonatomic,retain) UIButton *clearMessage;
 @end
 
 @implementation GvaViewViewController
@@ -68,8 +72,26 @@
 @synthesize captureSession = _captureSession;
 @synthesize makeItSmall = _makeItSmall;
 @synthesize ready2chat = _ready2chat;
+@synthesize sendMessage = _sendMessage;
+@synthesize clearMessage = _clearMessage;
 
 # pragma mark - Lazy Instantiation
+
+- (UIButton *)sendMessage {
+    if (!_sendMessage) {
+        _sendMessage  = [[UIButton alloc] initWithFrame:SEND_MESSAGE_BUTTON];
+    }
+    
+    return _sendMessage;
+}
+
+- (UIButton *)clearMessage {
+    if (!_clearMessage) {
+        _clearMessage = [[UIButton alloc] initWithFrame:CLEAR_MESSAGE_BUTTON];
+    }
+    
+    return _clearMessage;
+}
 
 - (UITextView *)sendView {
     if (!_sendView) {
@@ -140,6 +162,10 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	
     UIAlertView *av = [[UIAlertView alloc] initWithTitle:outstring message:nil delegate:nil cancelButtonTitle:@"OK"otherButtonTitles:nil];
 	[av show];
+}
+
+- (void)clearTextView {
+    self.sendView.text = @"";
 }
 
 - (void)clearStatusAndAlertInformationBarText {
@@ -274,6 +300,20 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	if (error) {
 		showAlert(@"%@", error);
 	}
+}
+
+- (void)sendMessageToTextView {
+    
+	if (!self.session)
+        return;
+    
+	NSString *text = self.sendView.text;
+	if (!text || (text.length == 0)) {
+        NSString *tmp = @"sendThisMessageToTextView";
+        tmp = [tmp stringByAppendingString:text];
+        
+        [self sendText:tmp];
+    }
 }
 
 - (void)sendImage:(UIImage *)image {
@@ -481,7 +521,6 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     }
 }
 
-
 - (void)session:(GKSession *)session didReceiveConnectionRequestFromPeer:(NSString *)peerID {
 	NSError* error = nil;
 	[session acceptConnectionFromPeer:peerID error:&error];
@@ -579,23 +618,6 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	//NSLog(@"%f (%f) => %f (%f)", manager.heading.trueHeading, oldRad, newHeading.trueHeading, newRad);
 }
 
-#pragma mark - Text View Methods
-
-- (void)textViewDidChange:(UITextView *)textView {
-    NSLog(@"here");
-	if (!self.session)
-        return;
-    NSLog(@"here");
-	NSString *text = self.sendView.text;
-	if (!text || (text.length == 0)) {
-        NSString *tmp = @"sendThisMessageToTextView";
-        tmp = [tmp stringByAppendingString:text];
-        
-        NSLog(@"here");
-        [self sendText:tmp];
-    }
-}
-
 # pragma mark - View Methods
 
 - (void)setGvaView:(GvaView *)gvaView { //reflash our view every time
@@ -615,8 +637,6 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	self.locationManager.headingFilter = 1;
 	self.locationManager.delegate = self;
 	[self.locationManager startUpdatingHeading];
-    
-    [self.sendView becomeFirstResponder];
 }
 
 - (void)viewDidUnload {
@@ -714,12 +734,29 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     [self.gvaView addSubview:self.videoStreaming];
     [self.videoStreaming setNeedsDisplay];
     
+    
+    //add text chat components
     [self.sendView setBackgroundColor:PURPLE];
     [self.gvaView addSubview:self.sendView];
     //self.sendView.hidden = !self.ready2chat;
     [self.receiveView setBackgroundColor:[UIColor lightGrayColor]];
     [self.gvaView addSubview:self.receiveView];
     //self.receiveView.hidden = !self.ready2chat;
+    
+    [self.sendMessage setBackgroundColor:[UIColor blackColor]];
+    [self.sendMessage setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.sendMessage setTitle:@"SEND" forState:UIControlStateNormal];
+    self.sendMessage.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
+    [self.sendMessage addTarget:self action:@selector(sendMessageToTextView) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.clearMessage setBackgroundColor:[UIColor blackColor]];
+    [self.clearMessage setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.clearMessage setTitle:@"CLEAR" forState:UIControlStateNormal];
+    self.clearMessage.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
+    [self.clearMessage addTarget:self action:@selector(clearTextView) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.gvaView addSubview:self.sendMessage];
+    [self.gvaView addSubview:self.clearMessage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
