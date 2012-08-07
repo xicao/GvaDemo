@@ -9,13 +9,16 @@
 #import "GvaViewController.h"
 #import "GvaView.h"
 
+#define PURPLE                      [UIColor colorWithRed:0.20392f green:0.19607f blue:0.61176f alpha:1.0f]
+
 #define CALIBRATION                 22
 
 #define STATUS_INFORMATION_BAR      CGRectMake(143,126-CALIBRATION,738,51)
 
 #define VIDEO_FRAME                 CGRectMake(360,185-CALIBRATION,400,400)
 
-#define TEXT_VIEW_FRAME             CGRectMake(143,126-CALIBRATION,738,51)
+#define SEND_VIEW_FRAME             CGRectMake(249.5,457-CALIBRATION,249,128)
+#define RECEIVE_VIEW_FRAME          CGRectMake(249.5,321-CALIBRATION,249,128)
 
 #define FUNCTION_BUTTON             CGRectMake(157.5,30-CALIBRATION,65,65)
 #define FUNCTION_BUTTON_GAP         92
@@ -45,6 +48,9 @@
 
 @property (nonatomic) BOOL makeItSmall;
 @property (nonatomic) BOOL ready2chat;
+
+@property (nonatomic,retain) UITextView *sendView;
+@property (nonatomic,retain) UITextView *receiveView;
 @end
 
 @implementation GvaViewViewController
@@ -64,6 +70,22 @@
 @synthesize ready2chat = _ready2chat;
 
 # pragma mark - Lazy Instantiation
+
+- (UITextView *)sendView {
+    if (!_sendView) {
+        _sendView = [[UITextView alloc] initWithFrame:SEND_VIEW_FRAME];
+    }
+    
+    return _sendView;
+}
+
+- (UITextView *)receiveView {
+    if (!_receiveView) {
+        _receiveView = [[UITextView alloc] initWithFrame:RECEIVE_VIEW_FRAME];
+    }
+    
+    return _receiveView;
+}
 
 - (UIImageView *)videoStreaming {
     if (!_videoStreaming) {
@@ -210,10 +232,10 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	if ([data length] < 1024) {// receive text
         NSLog(@"text received");
         
+        NSString* text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        
         if ([self.mode.text isEqualToString:@"Crew-point"]) {
-            
-            NSString* text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            
+       
             if ([text isEqualToString:@"iWantToStopOverlay"]) {
                 //self.scanningLabel.text = @"";
             } else if ([text isEqualToString:@"iWantToStopVideo"]) {
@@ -223,6 +245,10 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
                 
                 //self.scanningLabel.text = [self.scanningLabel.text stringByAppendingString:text];
             }
+        }
+        
+        if ([[text substringToIndex:36] isEqualToString:@"sendThisMessageToTextView"]) {
+            self.receiveView.text = text;
         }
         
 	} else {// receive image
@@ -553,6 +579,22 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	//NSLog(@"%f (%f) => %f (%f)", manager.heading.trueHeading, oldRad, newHeading.trueHeading, newRad);
 }
 
+#pragma mark - Text View Methods
+
+- (void)textViewDidChange:(UITextView *)textView {
+    NSLog(@"here");
+	if (!self.session)
+        return;
+    NSLog(@"here");
+	NSString *text = self.sendView.text;
+	if (!text || (text.length == 0)) {
+        NSString *tmp = @"sendThisMessageToTextView";
+        tmp = [tmp stringByAppendingString:text];
+        
+        NSLog(@"here");
+        [self sendText:tmp];
+    }
+}
 
 # pragma mark - View Methods
 
@@ -573,6 +615,8 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 	self.locationManager.headingFilter = 1;
 	self.locationManager.delegate = self;
 	[self.locationManager startUpdatingHeading];
+    
+    [self.sendView becomeFirstResponder];
 }
 
 - (void)viewDidUnload {
@@ -669,6 +713,13 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     //add view streaming window
     [self.gvaView addSubview:self.videoStreaming];
     [self.videoStreaming setNeedsDisplay];
+    
+    [self.sendView setBackgroundColor:PURPLE];
+    [self.gvaView addSubview:self.sendView];
+    //self.sendView.hidden = !self.ready2chat;
+    [self.receiveView setBackgroundColor:[UIColor lightGrayColor]];
+    [self.gvaView addSubview:self.receiveView];
+    //self.receiveView.hidden = !self.ready2chat;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
