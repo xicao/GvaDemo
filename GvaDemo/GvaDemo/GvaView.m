@@ -54,7 +54,7 @@
 #define F17 @""
 #define F18 @""
 #define F19 @""
-#define F20 @"QUIT"
+#define F20 @"LEAVE"
 
 @implementation GvaView
 

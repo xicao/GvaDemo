@@ -42,6 +42,9 @@
 @property (nonatomic, retain) AVCaptureSession *captureSession;
 
 @property (nonatomic,retain) NSString *ready2connect;
+
+@property (nonatomic) BOOL makeItSmall;
+@property (nonatomic) BOOL ready2chat;
 @end
 
 @implementation GvaViewViewController
@@ -57,6 +60,8 @@
 @synthesize videoStreaming = _videoStreaming;
 @synthesize videoOutput = _videoOutput;
 @synthesize captureSession = _captureSession;
+@synthesize makeItSmall = _makeItSmall;
+@synthesize ready2chat = _ready2chat;
 
 # pragma mark - Lazy Instantiation
 
@@ -187,6 +192,16 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     self.videoStreaming.image = nil;
     
     [self sendText:@"iWantToStopVideo"];
+}
+
+- (void)changeVedioFrameSize {
+    if (!self.makeItSmall) {
+            [self.videoStreaming setFrame:CGRectMake(self.videoStreaming.frame.origin.x * 1.5, self.videoStreaming.frame.origin.y, self.videoStreaming.frame.size.width / 2, self.videoStreaming.frame.size.height / 2)];
+    } else {
+        [self.videoStreaming setFrame:VIDEO_FRAME];
+    }
+
+    self.makeItSmall = !self.makeItSmall;
 }
 
 #pragma mark - send and receive methods
@@ -328,6 +343,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     }
     
     self.session = nil;
+    self.videoStreaming.image = nil;
 }
 
 - (void)loadPeerList {
@@ -420,6 +436,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 		case GKPeerStateDisconnected:
 			[self setStatusAndAlertInformationBarText:[NSString stringWithFormat:@"Disconnected to %@.", [session displayNameForPeer:peerID]]];
 			self.session = nil;
+            self.videoStreaming.image = nil;
             
         case GKPeerStateUnavailable:
             [self.peerList removeObject:peerID];
@@ -507,7 +524,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     } else if ([sender.currentTitle isEqualToString:@"F7"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F8"]) {
-        
+        [self changeVedioFrameSize];
     } else if ([sender.currentTitle isEqualToString:@"F9"]) {
         
     } else if ([sender.currentTitle isEqualToString:@"F10"]) {
@@ -651,6 +668,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     
     //add view streaming window
     [self.gvaView addSubview:self.videoStreaming];
+    [self.videoStreaming setNeedsDisplay];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
