@@ -40,12 +40,12 @@
 #define F5 @"CAPTURE"
 #define F6 @"V_STOP"
 
-#define F7 @"OVERLAY"
-#define F8 @""
+#define F7 @""
+#define F8 @"FIT SIZE"
 #define F9 @""
 #define F10 @""
 #define F11 @""
-#define F12 @"O_STOP"
+#define F12 @""
 
 #define F13 @""
 #define F14 @""

@@ -34,6 +34,8 @@
 
 #define COMPASS                     CGRectMake(248,185-CALIBRATION,103.6,110.4)
 
+#define OVERLAY_BUTTON              CGRectMake(433.5,185-CALIBRATION,300,60)
+
 @interface GvaViewViewController ()
 
 @property (nonatomic, weak) IBOutlet GvaView *gvaView;
@@ -53,8 +55,10 @@
 
 @property (nonatomic,retain) UITextView *sendView;
 @property (nonatomic,retain) UITextView *receiveView;
-@property (nonatomic,retain) UIButton *sendMessage;
-@property (nonatomic,retain) UIButton *clearMessage;
+@property (nonatomic,retain) UIButton *sendMessageButton;
+@property (nonatomic,retain) UIButton *clearMessageButton;
+
+@property (nonatomic,retain) UIButton *overlayButton;
 @end
 
 @implementation GvaViewViewController
@@ -72,25 +76,34 @@
 @synthesize captureSession = _captureSession;
 @synthesize makeItSmall = _makeItSmall;
 @synthesize ready2chat = _ready2chat;
-@synthesize sendMessage = _sendMessage;
-@synthesize clearMessage = _clearMessage;
+@synthesize sendMessageButton = _sendMessageButton;
+@synthesize clearMessageButton = _clearMessageButton;
+@synthesize overlayButton = _overlayButton;
 
 # pragma mark - Lazy Instantiation
 
-- (UIButton *)sendMessage {
-    if (!_sendMessage) {
-        _sendMessage  = [[UIButton alloc] initWithFrame:SEND_MESSAGE_BUTTON];
+- (UIButton *)overlayButton {
+    if (!_overlayButton) {
+        _overlayButton = [[UIButton alloc] initWithFrame:OVERLAY_BUTTON];
     }
     
-    return _sendMessage;
+    return _overlayButton;
 }
 
-- (UIButton *)clearMessage {
-    if (!_clearMessage) {
-        _clearMessage = [[UIButton alloc] initWithFrame:CLEAR_MESSAGE_BUTTON];
+- (UIButton *)sendMessageButton {
+    if (!_sendMessageButton) {
+        _sendMessageButton  = [[UIButton alloc] initWithFrame:SEND_MESSAGE_BUTTON];
     }
     
-    return _clearMessage;
+    return _sendMessageButton;
+}
+
+- (UIButton *)clearMessageButton {
+    if (!_clearMessageButton) {
+        _clearMessageButton = [[UIButton alloc] initWithFrame:CLEAR_MESSAGE_BUTTON];
+    }
+    
+    return _clearMessageButton;
 }
 
 - (UITextView *)sendView {
@@ -178,7 +191,12 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 }
 
 - (void)textChat {
+    self.ready2chat = !self.ready2chat;
     
+    self.sendMessageButton.hidden = !self.ready2chat;
+    self.clearMessageButton.hidden = !self.ready2chat;
+    self.sendView.hidden = !self.ready2chat;
+    self.receiveView.hidden = !self.ready2chat;
 }
 
 - (void)startVideoStreaming {
@@ -244,12 +262,16 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
 
 - (void)changeVedioFrameSize {
     if (!self.makeItSmall) {
-            [self.videoStreaming setFrame:CGRectMake(self.videoStreaming.frame.origin.x * 1.5, self.videoStreaming.frame.origin.y, self.videoStreaming.frame.size.width / 2, self.videoStreaming.frame.size.height / 2)];
+        [self.videoStreaming setFrame:CGRectMake(self.videoStreaming.frame.origin.x * 1.5, self.videoStreaming.frame.origin.y, self.videoStreaming.frame.size.width / 2, self.videoStreaming.frame.size.height / 2)];
     } else {
         [self.videoStreaming setFrame:VIDEO_FRAME];
     }
-
+    
     self.makeItSmall = !self.makeItSmall;
+}
+
+- (void)getWeaponSystemInfo {
+    
 }
 
 #pragma mark - send and receive methods
@@ -259,9 +281,10 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
         NSLog(@"text received");
         
         NSString* text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        //NSLog(@"%@",[text substringToIndex:6]);
         
         if ([self.mode.text isEqualToString:@"Crew-point"]) {
-       
+            
             if ([text isEqualToString:@"iWantToStopOverlay"]) {
                 //self.scanningLabel.text = @"";
             } else if ([text isEqualToString:@"iWantToStopVideo"]) {
@@ -273,15 +296,11 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
             }
         }
         
-        if ([[text substringToIndex:36] isEqualToString:@"sendThisMessageToTextView"]) {
-            self.receiveView.text = text;
-        }
-        
 	} else {// receive image
 		NSLog(@"image received");
 		
         [self.videoStreaming performSelectorOnMainThread:@selector(setImage:)
-                                         withObject:[UIImage imageWithData:data] waitUntilDone:YES];
+                                              withObject:[UIImage imageWithData:data] waitUntilDone:YES];
 	}
 }
 
@@ -308,10 +327,14 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
         return;
     
 	NSString *text = self.sendView.text;
-	if (!text || (text.length == 0)) {
-        NSString *tmp = @"sendThisMessageToTextView";
+    
+    NSLog(@"%@",text);
+    
+	if (text.length != 0) {
+        NSString *tmp = @"m355age";
         tmp = [tmp stringByAppendingString:text];
         
+        NSLog(@"%@",tmp);
         [self sendText:tmp];
     }
 }
@@ -370,7 +393,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     
     
     [self.videoStreaming performSelectorOnMainThread:@selector(setImage:)
-                                     withObject:image waitUntilDone:YES];
+                                          withObject:image waitUntilDone:YES];
     
     CVPixelBufferUnlockBaseAddress(imageBuffer,0);
     
@@ -489,7 +512,7 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
                 
                 [session connectToPeer:peerID withTimeout:10];
             }
-
+            
 			break;
 			
 		case GKPeerStateConnected:
@@ -544,21 +567,37 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     [self.gvaView functionLabelSelected:sender.currentTitle];
     
     if ([sender.currentTitle isEqualToString:@"SA"]) {
-        
+        self.overlayButton.hidden = YES;
+        self.videoStreaming.hidden = NO;
     } else if ([sender.currentTitle isEqualToString:@"WPN"]) {
-        
+        self.overlayButton.hidden = NO;
+        self.videoStreaming.hidden = YES;
+        [self.overlayButton setTitle:@"Weapon Systems" forState:UIControlStateNormal];
+        [self.overlayButton addTarget:self action:@selector(getWeaponSystemInfo) forControlEvents:UIControlEventTouchUpInside];
     } else if ([sender.currentTitle isEqualToString:@"DEF"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"Defensive Systems" forState:UIControlStateNormal];
     } else if ([sender.currentTitle isEqualToString:@"SYS"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"System Status" forState:UIControlStateNormal];
     } else if ([sender.currentTitle isEqualToString:@"DRV"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"Driving Information and Driving Aids" forState:UIControlStateNormal];
     } else if ([sender.currentTitle isEqualToString:@"STR"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"Special to Role Functions" forState:UIControlStateNormal];
     } else if ([sender.currentTitle isEqualToString:@"COM"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"Communications" forState:UIControlStateNormal];
     } else if ([sender.currentTitle isEqualToString:@"BMS"]) {
-        
+        self.videoStreaming.hidden = YES;
+        self.overlayButton.hidden = NO;
+        [self.overlayButton setTitle:@"Battlefield Management System" forState:UIControlStateNormal];
     }
 }
 
@@ -738,25 +777,36 @@ void myShowAlert(int line, char *functname, id formatstring,...) {
     //add text chat components
     [self.sendView setBackgroundColor:PURPLE];
     [self.gvaView addSubview:self.sendView];
-    //self.sendView.hidden = !self.ready2chat;
+    self.sendView.hidden = !self.ready2chat;
     [self.receiveView setBackgroundColor:[UIColor lightGrayColor]];
     [self.gvaView addSubview:self.receiveView];
-    //self.receiveView.hidden = !self.ready2chat;
+    self.receiveView.hidden = !self.ready2chat;
     
-    [self.sendMessage setBackgroundColor:[UIColor blackColor]];
-    [self.sendMessage setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.sendMessage setTitle:@"SEND" forState:UIControlStateNormal];
-    self.sendMessage.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
-    [self.sendMessage addTarget:self action:@selector(sendMessageToTextView) forControlEvents:UIControlEventTouchUpInside];
+    [self.sendMessageButton setBackgroundColor:[UIColor blackColor]];
+    [self.sendMessageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.sendMessageButton setTitle:@"SEND" forState:UIControlStateNormal];
+    self.sendMessageButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
+    [self.sendMessageButton addTarget:self action:@selector(sendMessageToTextView) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.clearMessage setBackgroundColor:[UIColor blackColor]];
-    [self.clearMessage setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.clearMessage setTitle:@"CLEAR" forState:UIControlStateNormal];
-    self.clearMessage.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
-    [self.clearMessage addTarget:self action:@selector(clearTextView) forControlEvents:UIControlEventTouchUpInside];
+    [self.clearMessageButton setBackgroundColor:[UIColor blackColor]];
+    [self.clearMessageButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.clearMessageButton setTitle:@"CLEAR" forState:UIControlStateNormal];
+    self.clearMessageButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
+    [self.clearMessageButton addTarget:self action:@selector(clearTextView) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.gvaView addSubview:self.sendMessage];
-    [self.gvaView addSubview:self.clearMessage];
+    self.sendMessageButton.hidden = !self.ready2chat;
+    self.clearMessageButton.hidden = !self.ready2chat;
+    [self.gvaView addSubview:self.sendMessageButton];
+    [self.gvaView addSubview:self.clearMessageButton];
+    
+    //overlay buttons
+    self.overlayButton.hidden = YES;
+    [self.overlayButton setBackgroundColor:[UIColor blackColor]];
+    [self.overlayButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.overlayButton setTitle:@"" forState:UIControlStateNormal];
+    self.overlayButton.titleLabel.font = [UIFont fontWithName:@"Helvetica" size: 17.0];
+    
+    [self.gvaView addSubview:self.overlayButton];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

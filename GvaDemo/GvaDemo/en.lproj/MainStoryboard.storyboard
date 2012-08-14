@@ -159,21 +159,6 @@
     <resources>
         <image name="button.png" width="62" height="62"/>
     </resources>
-    <classes>
-        <class className="GvaDemoViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GvaDemoViewController.h"/>
-        </class>
-        <class className="GvaView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GvaView.h"/>
-        </class>
-        <class className="GvaViewViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/GvaViewViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="gvaView" candidateClass="GvaView"/>
-                <relationship kind="outlet" name="mode" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
